@@ -1,27 +1,48 @@
 import youtube_dl
-from bottle import run, get, post, request # or route
+from bottle import run, get, post, request, template # or route
 
 @get('/login') # or @route('/login')
 def login():
     return '''
         <form action="/login" method="post">
-            URL: <input name="username" type="text" />
-            Title: <input name="songname" type="text" />
+            Youtube URL: <input name="URL" type="text" />
+            Video ID: <input name="username" type="text" />
+            <label for="downloadoption">Option</label>
+                <select name="downloadoption" id="downloadoption">
+                <option value="mp3">Solo Audio</option>
+                <option value="mp4">Audio+Video</option>
+            </select> 
             <input value="Download" type="submit" />
         </form>
     '''
 
 @post('/login') # or @route('/login', method='POST')
 def do_login():
+    URL = request.forms.get('URL')
     username = request.forms.get('username')
-    songname = request.forms.get('songname')
-    download_clip("https://www.youtube.com/watch?v="+username,songname+".mp3")
+    downloadoption = request.forms.get('downloadoption')
+    print (downloadoption)
+    #download_clip("https://www.youtube.com/watch?v="+username,downloadoption)
+    download_clip(URL,downloadoption)
     return "<p>Download</p>"
 
 def download_clip(url, name):
-    ydl_opts = {
+    '''download video equal to MP4, only audio MP3'''
+    if name == "mp4":
+        ydl_opts = {
+            'format': 'bestvideo+bestaudio/best',
+            'outtmpl': '/home/sduro/Documentos/%(title)s-%(id)s.%(ext)s',#+name,
+            'noplaylist': True,
+            'continue_dl': True,
+            'postprocessors': [{
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': '%(ext)s',
+                'preferredquality': '192', }]
+        }
+    else:
+        ydl_opts = {
         'format': 'bestaudio/best',
-        'outtmpl': '/home/sduro/Documentos/'+name,
+        'outtmpl': '/home/sduro/Documentos/%(title)s.mp3',#+name,
         'noplaylist': True,
         'continue_dl': True,
         'postprocessors': [{
@@ -40,4 +61,4 @@ def download_clip(url, name):
         return False 
 
 #download_clip("https://www.youtube.com/watch?v=uGhKqb2Ow3E",True)
-run(host='localhost', port=8080, debug=True)
+run(host='0.0.0.0', port=8080, debug=True)

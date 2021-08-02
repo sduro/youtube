@@ -9,9 +9,15 @@
     <script src='main.js'></script>
 </head>
 <body>
-    <form method="POST">
-        <input name="text">
-        <input type="submit">
+    <form action="/login" method="post">
+        Youtube URL: <input name="URL" type="text" />
+        Video ID: <input name="username" type="text" />
+        <label for="downloadoption">Option</label>
+            <select name="downloadoption" id="downloadoption">
+            <option value="mp3">Solo Audio</option>
+            <option value="mp4">Audio+Video</option>
+        </select> 
+        <input value="Download" type="submit" />
     </form>
 </body>
 </html>
