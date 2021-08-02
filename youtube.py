@@ -1,8 +1,10 @@
 import youtube_dl
+import os
 from bottle import run, get, post, request, template # or route
 
 @get('/login') # or @route('/login')
 def login():
+
     return '''
         <form action="/login" method="post">
             Youtube URL: <input name="URL" type="text" />
@@ -24,7 +26,10 @@ def do_login():
     print (downloadoption)
     #download_clip("https://www.youtube.com/watch?v="+username,downloadoption)
     download_clip(URL,downloadoption)
-    return "<p>Download</p>"
+    return '''<form action="/login" method="post">
+                 <input value="Back" type="submit" />
+        </form>
+        '''
 
 def download_clip(url, name):
     '''download video equal to MP4, only audio MP3'''
