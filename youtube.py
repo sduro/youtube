@@ -9,6 +9,7 @@ with open("youtube.json", "r") as jsonfile:
 @get('/login') # or @route('/login')
 def login():
     return '''
+            <form action="/login" method="post">
             Youtube URL: <input name="URL" type="text" />
             <label for="downloadoption">Option</label>
                 <select name="downloadoption" id="downloadoption">
@@ -18,20 +19,17 @@ def login():
             <input value="Download" type="submit" />
         </form>
     '''
-
 @post('/login') # or @route('/login', method='POST')
 def do_login():
     yield "Downloading..."
     URL = request.forms.get('URL')
     downloadoption = request.forms.get('downloadoption')
-    #download_clip("https://www.youtube.com/watch?v="+username,downloadoption)
     download_clip(URL,downloadoption)
     yield "Done"
     return '''<form action="/login" method="post">
                  <input value="Back" type="submit" />
         </form>
         '''
-
 def download_clip(url, name):
     '''
     Cambiar path para raspberry /home/pi/Documents/youtube
