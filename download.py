@@ -1,13 +1,20 @@
 import youtube_dl
-
+import platform
 def download_clip(url, name,data):
     '''
     path viene de fichero de configuracion
     '''
     print (data[name])
+    sistema =platform.system()
+    print (sistema)
+
+    if sistema == 'Linux':
+        directorio = data['configuration']['download_dir_linux']
+    else:
+        directorio = data['configuration']['download_dir_win32']
     ydl_opts = {
             'format': data[name]['format'],
-            'outtmpl': data['configuration']['download_dir']+'%(title)s-%(id)s.%(ext)s',
+            'outtmpl': directorio +'/'+'%(title)s-%(id)s.%(ext)s',
             'noplaylist': True,
             'continue_dl': True,
             'postprocessors': [{
