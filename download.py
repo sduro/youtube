@@ -32,3 +32,26 @@ def download_clip(url, name,data):
             return True
     except Exception:
         return False 
+
+def search_and_dowload(url, name,data):
+    '''
+    path viene de fichero de configuracion
+    '''
+    
+    sistema =platform.system()
+    print (sistema)
+
+    ydl_opts = {
+            
+            'noplaylist': True,
+            'continue_dl': True,
+            'postprocessors': [{
+                'key': 'FFmpegExtractAudio'}]
+    }
+    try:
+        
+        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info("ytsearch:"+url)
+            return True
+    except Exception:
+        return False 

@@ -49,8 +49,8 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
-            <li><a href="/spotify">Spotify</a></li>
+            <li><a href="#">Home</a></li>
+            <li class="active"><a href="/spotify">Spotify</a></li>
             <li><a href="/config">Configuration</a></li>
             <li><a href="#">Contact</a></li>
           </ul>
@@ -62,15 +62,9 @@
 
       <div class="starter-template">
         <p class="lead">
-            <form action="/login" method="post">
-                <h2>Youtube URL: <input name="URL" type="text" />
-                <br><br>
-                <h3><label for="downloadoption">Option: </label>
-                    <select name="downloadoption" id="downloadoption">
-                    <option value="mp3">Solo Audio</option>
-                    <option value="mp4">Audio+Video</option>
-                </select>
-                <input value="Download" type="submit" /></h3>
+            <form action="/spotify" method="post">
+                <h2>Spotify URL: <input name="URL" type="text" />
+                <h3><input value="Download" type="submit" /></h3>
             </form>
         </h2>
       </div>

@@ -5,8 +5,11 @@ youtube.json ->fichero de configuracion
 import json
 import os
 import platform
+import spotipy 
+from spotipy.oauth2 import SpotifyClientCredentials 
 from bottle import run, get, post, request, template, route,static_file,redirect, view # or route
 from download import download_clip
+from download import search_and_dowload
 
 with open("youtube.json", "r") as jsonfile:
     data = json.load(jsonfile) # Reading the file
@@ -50,7 +53,44 @@ def do_login():
         directorio = data['configuration']['download_dir_win32']
     return "Hello World!"
     #return template('static/index.html',path=actual_path,download_path=directorio)
-    
+
+@route('/spotify')
+def spotify():
+    actual_path = os.getcwd()
+    sistema =platform.system()
+    if sistema == 'Linux':
+        directorio = data['configuration']['download_dir_linux']
+    else:
+        directorio = data['configuration']['download_dir_win32']
+    return template('static/spotify.html',path=actual_path,download_path=directorio)
+
+@post('/spotify') # or @route('/login', method='POST')
+def spotify_do():
+    #https://open.spotify.com/track/2WyNqDHLRJLzJuidCsO1Ey?si=452e58a9890c4bf0
+    #To access authorised Spotify data
+    client_id = '6bbbe4ed36e74435bb87f04904cb0d31'
+    client_secret = 'cfdc80fa279f4d8cbf2a24b161293910'
+    client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
+    sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager) 
+    downloadoption = request.forms.get('URL')
+    # spotify object to access API
+    #result =sp.track("https://open.spotify.com/track/2WyNqDHLRJLzJuidCsO1Ey?si=73c4738c9c2647f1")
+    result =sp.track(downloadoption)
+    print (result['artists'][0]['name'], result['name'])
+
+    URL = request.forms.get('URL')
+    downloadoption = request.forms.get('downloadoption')
+    search_and_dowload(URL,downloadoption,data) #url=url,dowloadoption=
+
+    actual_path = os.getcwd()
+    sistema =platform.system()
+    if sistema == 'Linux':
+        directorio = data['configuration']['download_dir_linux']
+    else:
+        directorio = data['configuration']['download_dir_win32']
+   
+    return (result['artists'][0]['name'], result['name'])
+
 @route('/config')
 def configuration():
     return template('static/configuration.html')
