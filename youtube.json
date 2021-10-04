@@ -1,7 +1,7 @@
 {
     "configuration": {
-        "download_dir_win32": "c:\\",
-        "download_dir_linux": "/home/sduro",
+        "Win32": "c:\\",
+        "Linux": "/home/sduro/Música",
         "bitrate": "192"
     },
     "mp3": {

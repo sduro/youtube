@@ -11,6 +11,8 @@ from bottle import run, get, post, request, template, route,static_file,redirect
 from download import download_clip
 from download import search_and_dowload
 
+
+
 with open("youtube.json", "r") as jsonfile:
     data = json.load(jsonfile) # Reading the file
     jsonfile.close()
@@ -27,11 +29,7 @@ def server_static(filename):
 @get('/login') # or @route('/login')
 def login():
     actual_path = os.getcwd()
-    sistema =platform.system()
-    if sistema == 'Linux':
-        directorio = data['configuration']['download_dir_linux']
-    else:
-        directorio = data['configuration']['download_dir_win32']
+    directorio = data['configuration'][platform.system()]
     return template('static/index.html',path=actual_path,download_path=directorio)
 
 @route("/static/css/<filename>")
@@ -47,21 +45,14 @@ def do_login():
     yield "Done"
     actual_path = os.getcwd()
     sistema =platform.system()
-    if sistema == 'Linux':
-        directorio = data['configuration']['download_dir_linux']
-    else:
-        directorio = data['configuration']['download_dir_win32']
+    directorio = data['configuration'][platform.system()]
     return "Hello World!"
     #return template('static/index.html',path=actual_path,download_path=directorio)
 
 @route('/spotify')
 def spotify():
     actual_path = os.getcwd()
-    sistema =platform.system()
-    if sistema == 'Linux':
-        directorio = data['configuration']['download_dir_linux']
-    else:
-        directorio = data['configuration']['download_dir_win32']
+    directorio = data['configuration'][platform.system()]
     return template('static/spotify.html',path=actual_path,download_path=directorio)
 
 @post('/spotify') # or @route('/login', method='POST')
@@ -75,21 +66,16 @@ def spotify_do():
     downloadoption = request.forms.get('URL')
     # spotify object to access API
     #result =sp.track("https://open.spotify.com/track/2WyNqDHLRJLzJuidCsO1Ey?si=73c4738c9c2647f1")
-    result =sp.track(downloadoption)
+    result = sp.track(downloadoption)
     print (result['artists'][0]['name'], result['name'])
+    string_to_search=result['artists'][0]['name']+' '+ result['name']
+    
+    #downloadoption = request.forms.get('downloadoption')
+    search_and_dowload(string_to_search,data) #url=url,dowloadoption=
 
-    URL = request.forms.get('URL')
-    downloadoption = request.forms.get('downloadoption')
-    search_and_dowload(URL,downloadoption,data) #url=url,dowloadoption=
-
-    actual_path = os.getcwd()
-    sistema =platform.system()
-    if sistema == 'Linux':
-        directorio = data['configuration']['download_dir_linux']
-    else:
-        directorio = data['configuration']['download_dir_win32']
-   
-    return (result['artists'][0]['name'], result['name'])
+    directorio = data['configuration'][platform.system()]
+    return template('static/index.html',path=os.getcwd(),download_path=directorio)
+    #return (result['artists'][0]['name'], result['name'])
 
 @route('/config')
 def configuration():
@@ -101,11 +87,7 @@ def configuration_save():
     configuracion a la variable de json'''
 
     new_path = request.forms.get('new_path')
-    sistema =platform.system()
-    if sistema == 'Linux':
-        data['configuration']['download_dir_linux'] = new_path
-    else:
-        data['configuration']['download_dir_win32'] = new_path
+    data['configuration'][platform.system()]= new_path
     return template('static/configuration.html')
 
 run(host='localhost', port=8088, debug=True)

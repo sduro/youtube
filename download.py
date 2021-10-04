@@ -5,13 +5,8 @@ def download_clip(url, name,data):
     path viene de fichero de configuracion
     '''
     print (data[name])
-    sistema =platform.system()
-    print (sistema)
-
-    if sistema == 'Linux':
-        directorio = data['configuration']['download_dir_linux']
-    else:
-        directorio = data['configuration']['download_dir_win32']
+    directorio = data['configuration'][platform.system()]
+    
     ydl_opts = {
             'format': data[name]['format'],
             'outtmpl': directorio +'/'+'%(title)s-%(id)s.%(ext)s',
@@ -33,25 +28,27 @@ def download_clip(url, name,data):
     except Exception:
         return False 
 
-def search_and_dowload(url, name,data):
+def search_and_dowload(url, data):
     '''
     path viene de fichero de configuracion
     '''
+    directorio = data['configuration'][platform.system()]
     
-    sistema =platform.system()
-    print (sistema)
-
     ydl_opts = {
-            
+            'format': 'bestaudio/best',
+            'outtmpl': directorio +'/'+'%(title)s-%(id)s.%(ext)s',
             'noplaylist': True,
             'continue_dl': True,
             'postprocessors': [{
-                'key': 'FFmpegExtractAudio'}]
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': '192', }]
     }
     try:
         
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info("ytsearch:"+url)
+            info = ydl.extract_info("ytsearch: "+url)
+            #print (info)
             return True
     except Exception:
         return False 
