@@ -38,16 +38,12 @@ def server_static(filename):
 
 @post('/login') # or @route('/login', method='POST')
 def do_login():
-    yield "Downloading..."
+    #yield "Downloading..."
     URL = request.forms.get('URL')
     downloadoption = request.forms.get('downloadoption')
     download_clip(URL,downloadoption,data)
-    yield "Done"
-    actual_path = os.getcwd()
-    sistema =platform.system()
-    directorio = data['configuration'][platform.system()]
-    return "Hello World!"
-    #return template('static/index.html',path=actual_path,download_path=directorio)
+    #yield "Done"
+    return template('static/menu.html')
 
 @route('/spotify')
 def spotify():
@@ -89,5 +85,11 @@ def configuration_save():
     new_path = request.forms.get('new_path')
     data['configuration'][platform.system()]= new_path
     return template('static/configuration.html')
+
+@route('/menu')
+def menu():
+    result = os.system('pip list | grep youtub'  ) 
+    return template('static/menu.html',path=result)
+
 
 run(host='localhost', port=8088, debug=True)
