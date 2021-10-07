@@ -49,8 +49,8 @@
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Main</a></li>
-            <li><a href="/login">Youtube</a></li>
+            <li ><a href="/">Main</a></li>
+            <li class="active"><a href="/youtube">Youtube</a></li>
             <li><a href="/spotify">Spotify</a></li>
             <li><a href="/config">Configuration</a></li>
             <li><a href="#">Contact</a></li>
@@ -63,11 +63,22 @@
 
       <div class="starter-template">
         <p class="lead">
-          <a class="btn btn-primary btn-lg btn-block" href="/login">Youtube</a></br>
-          <a class="btn btn-primary btn-lg btn-block" href="/spotify">Spotify</a>
-        
+            <form action="/youtube" method="post">
+                <h2>Youtube URL: <input name="URL" type="text" />
+                <br><br>
+                <h3><label for="downloadoption">Option: </label>
+                    <select name="downloadoption" id="downloadoption">
+                    <option value="mp3">Solo Audio</option>
+                    <option value="mp4">Audio+Video</option>
+                </select>
+                <input value="Download" type="submit" /></h3>
+            </form>
+        </h2>
       </div>
+      
       <h3>Directorio actual: {{path}}</h3>
+      <h3>Directorio descarga: {{download_path}}</h3>
+
     </div><!-- /.container -->
 
 

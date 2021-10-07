@@ -1,6 +1,6 @@
 '''
 Pagina web para descargar mp3
-youtube.json ->fichero de configuracion
+config.json ->fichero de configuracion
 '''
 import json
 import os
@@ -11,14 +11,12 @@ from bottle import run, get, post, request, template, route,static_file,redirect
 from download import download_clip
 from download import search_and_dowload
 
-
-
-with open("youtube.json", "r") as jsonfile:
+with open("config.json", "r") as jsonfile:
     data = json.load(jsonfile) # Reading the file
     jsonfile.close()
 
 def config():
-    with open("youtube.json", "w") as jsonfile:
+    with open("config.json", "w") as jsonfile:
         json.dump(data,jsonfile,ensure_ascii=False) # writing the file
         jsonfile.close()
 
@@ -26,30 +24,31 @@ def config():
 def server_static(filename):
 	return static_file(filename,root="./static/css")
 
-@get('/login') # or @route('/login')
+@get('/youtube') # or @route('/login')
 def login():
     actual_path = os.getcwd()
     directorio = data['configuration'][platform.system()]
-    return template('static/index.html',path=actual_path,download_path=directorio)
+    return template('static/youtube.html',path=actual_path,download_path=directorio)
 
 @route("/static/css/<filename>")
 def server_static(filename):
 	return static_file(filename,root="./static/css")
 
-@post('/login') # or @route('/login', method='POST')
+@post('/youtube') # or @route('/login', method='POST')
 def do_login():
     #yield "Downloading..."
     URL = request.forms.get('URL')
     downloadoption = request.forms.get('downloadoption')
     download_clip(URL,downloadoption,data)
     #yield "Done"
-    return template('static/menu.html')
+    return template('static/main.html',path="done")
 
 @route('/spotify')
 def spotify():
     actual_path = os.getcwd()
     directorio = data['configuration'][platform.system()]
     return template('static/spotify.html',path=actual_path,download_path=directorio)
+    
 
 @post('/spotify') # or @route('/login', method='POST')
 def spotify_do():
@@ -70,12 +69,13 @@ def spotify_do():
     search_and_dowload(string_to_search,data) #url=url,dowloadoption=
 
     directorio = data['configuration'][platform.system()]
-    return template('static/index.html',path=os.getcwd(),download_path=directorio)
-    #return (result['artists'][0]['name'], result['name'])
-
+    #return template('static/index.html',path=os.getcwd(),download_path=directorio)
+    return template('static/main.html',path="done")
+    
 @route('/config')
 def configuration():
-    return template('static/configuration.html')
+    directorio = data['configuration'][platform.system()]
+    return template('static/configuration.html',path=directorio)
 
 @post('/config')
 def configuration_save():
@@ -84,12 +84,11 @@ def configuration_save():
 
     new_path = request.forms.get('new_path')
     data['configuration'][platform.system()]= new_path
-    return template('static/configuration.html')
+    return template('static/configuration.html',path=new_path)
 
-@route('/menu')
+@route('/')
 def menu():
     result = os.system('pip list | grep youtub'  ) 
-    return template('static/menu.html',path=result)
-
+    return template('static/main.html',path=result)
 
 run(host='localhost', port=8088, debug=True)
