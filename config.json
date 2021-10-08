@@ -1,6 +1,6 @@
 {
     "configuration": {
-        "Win32": "c:\\",
+        "Windows": "c:\\",
         "Linux": "/home/sduro/Música",
         "bitrate": "192"
     },
