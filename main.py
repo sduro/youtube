@@ -20,8 +20,6 @@ def config():
         json.dump(data,jsonfile,ensure_ascii=False) # writing the JSON file with new configuration
         jsonfile.close()
 
-
-
 @route("/static/css/<filename>")
 def server_static(filename):
 	return static_file(filename,root="./static/css") #command to access at CSS files
