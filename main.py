@@ -12,22 +12,24 @@ from download import download_clip
 from download import search_and_dowload
 
 with open("config.json", "r") as jsonfile:
-    data = json.load(jsonfile) # Reading the file
+    data = json.load(jsonfile) # Reading the JSON file
     jsonfile.close()
 
 def config():
     with open("config.json", "w") as jsonfile:
-        json.dump(data,jsonfile,ensure_ascii=False) # writing the file
+        json.dump(data,jsonfile,ensure_ascii=False) # writing the JSON file with new configuration
         jsonfile.close()
+
+
 
 @route("/static/css/<filename>")
 def server_static(filename):
-	return static_file(filename,root="./static/css")
+	return static_file(filename,root="./static/css") #command to access at CSS files
 
 @get('/youtube') # or @route('/login')
 def login():
     actual_path = os.getcwd()
-    directorio = data['configuration'][platform.system()]
+    directorio = data['configuration'][platform.system()] #get the actual SO
     return template('static/youtube.html',path=actual_path,download_path=directorio)
 
 @route("/static/css/<filename>")
@@ -42,6 +44,10 @@ def do_login():
     download_clip(URL,downloadoption,data)
     #yield "Done"
     return template('static/main.html',path="done")
+
+####################
+# Spotify function #
+####################
 
 @route('/spotify')
 def spotify():
@@ -71,7 +77,11 @@ def spotify_do():
     directorio = data['configuration'][platform.system()]
     #return template('static/index.html',path=os.getcwd(),download_path=directorio)
     return template('static/main.html',path="done")
-    
+
+####################
+# Config  function #
+####################
+
 @route('/config')
 def configuration():
     directorio = data['configuration'][platform.system()]
@@ -88,7 +98,6 @@ def configuration_save():
 
 @route('/')
 def menu():
-    result = os.system('pip list | grep youtub'  ) 
-    return template('static/main.html',path=result)
+    return template('static/main.html',path="main")
 
 run(host='localhost', port=8088, debug=True)
