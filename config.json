@@ -1,7 +1,7 @@
 {
     "configuration": {
         "Windows": "c:\\",
-        "Linux": "/home/sduro/Música",
+        "Linux": "/home/user/Música",
         "bitrate": "192"
     },
     "mp3": {
