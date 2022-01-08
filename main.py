@@ -58,8 +58,8 @@ def spotify():
 def spotify_do():
     #https://open.spotify.com/track/2WyNqDHLRJLzJuidCsO1Ey?si=452e58a9890c4bf0
     #To access authorised Spotify data
-    client_id = '6bbbe4ed36e74435bb87f04904cb0d31'
-    client_secret = 'cfdc80fa279f4d8cbf2a24b161293910'
+    client_id = 'xxxxxxxxxxxxxx'
+    client_secret = 'yyyyyyyyyyyyyyy'
     client_credentials_manager = SpotifyClientCredentials(client_id=client_id, client_secret=client_secret)
     sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager) 
     downloadoption = request.forms.get('URL')
