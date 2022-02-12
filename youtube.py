@@ -2,12 +2,9 @@ import youtube_dl
 import json
 from bottle import run, get, post, request, template, route # or route
 
-with open("youtube.json", "r") as jsonfile:
-    data = json.load(jsonfile) # Reading the file
-    jsonfile.close()
-
 @get('/login') # or @route('/login')
 def login():
+    print (data['download_dir'])
     return '''
             Youtube URL: <input name="URL" type="text" />
             <label for="downloadoption">Option</label>
@@ -25,6 +22,7 @@ def do_login():
     URL = request.forms.get('URL')
     downloadoption = request.forms.get('downloadoption')
     #download_clip("https://www.youtube.com/watch?v="+username,downloadoption)
+    print (URL)
     download_clip(URL,downloadoption)
     yield "Done"
     return '''<form action="/login" method="post">
@@ -69,4 +67,8 @@ def download_clip(url, name):
         return False 
 
 #download_clip("https://www.youtube.com/watch?v=uGhKqb2Ow3E",True)
+with open("youtube.json", "r") as jsonfile:
+    data = json.load(jsonfile) # Reading the file
+    jsonfile.close()
+    print ("Read Success")
 run(host='localhost', port=8088, debug=True)
